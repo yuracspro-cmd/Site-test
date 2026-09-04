@@ -1,0 +1,715 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+
+<!-- local-react: додано tools/postprocess.py.
+     support.js інакше тягне React з unpkg.com — ~140 КБ зі стороннього
+     хоста, і до їх приходу не рендериться нічого. Тут ті самі файли
+     локально (SRI зійшлися з константами в support.js), а defer лишає
+     порядок: React → ReactDOM → support.js.
+     Через window.__resources цього робити НЕ можна: непорожній
+     __resources вимикає повторний розбір сторінки, а без нього рантайм
+     губить <option> у селекті предметів. -->
+<script src="assets/vendor/react-18.3.1.production.min.js" defer></script>
+<script src="assets/vendor/react-dom-18.3.1.production.min.js" defer></script>
+<!-- /local-react -->
+<script src="./support.js" defer></script>
+
+<!-- static-seo: додано tools/postprocess.py.
+     Дублікат <helmet> із <body>: боти прев'ю посилань (Telegram, Facebook,
+     WhatsApp) JS не виконують і бачать тільки цей блок. -->
+<title>ADMI School — Вчимо не зубрити, а розуміти!</title>
+<meta name="description" content="Підготовка до НМТ та контрольних, покращення оцінок і цікаве навчання. Безкоштовне визначення рівня знань! Записуйтесь на урок ❤️">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="canonical" href="https://www.admischool.online/">
+<meta name="theme-color" content="#1d3b64">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ADMI School">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:url" content="https://www.admischool.online/">
+<meta property="og:title" content="ADMI School — Вчимо не зубрити, а розуміти!">
+<meta property="og:description" content="Підготовка до НМТ та контрольних, покращення оцінок і цікаве навчання. Безкоштовне визначення рівня знань! Записуйтесь на урок ❤️">
+<meta property="og:image" content="https://www.admischool.online/assets/og-admi.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ADMI School — Вчимо не зубрити, а розуміти!">
+<meta name="twitter:description" content="Підготовка до НМТ та контрольних, покращення оцінок і цікаве навчання. Безкоштовне визначення рівня знань! Записуйтесь на урок ❤️">
+<meta name="twitter:image" content="https://www.admischool.online/assets/og-admi.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "ADMI School",
+  "slogan": "Вчимо не зубрити, а розуміти!",
+  "url": "https://www.admischool.online/",
+  "logo": "https://www.admischool.online/assets/og-admi.png",
+  "email": "contact@admischool.online",
+  "telephone": "+380755458103",
+  "sameAs": [
+    "https://www.instagram.com/admischool",
+    "https://t.me/admischool_online"
+  ]
+}
+</script>
+<!-- /static-seo -->
+
+<!-- local-fonts: додано tools/postprocess.py.
+     Montserrat лежить у assets/fonts/ — жодного запиту на fonts.googleapis.com,
+     тож рендер не залежить від сторонньої мережі. Файли варіативні (fvar),
+     один на subset покриває всі ваги 100–900. -->
+<link rel="preload" href="assets/fonts/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/montserrat-cyrillic-ext.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/montserrat-cyrillic.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/montserrat-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<!-- /local-fonts -->
+
+<!-- slot-fill: додано tools/postprocess.py.
+     image-slot ставить data-filled сам, коли має src, і цим атрибутом
+     прибирає у своєму shadow DOM рамку-заповнювач. Рантайм після
+     повторного розбору сторінки синхронізує атрибути з шаблоном і
+     data-filled зчищає — тоді поверх фото проступає пунктир. Повертаємо. -->
+<script>
+(function(){
+  function fix(el){
+    if (el.getAttribute('src') && !el.hasAttribute('data-filled')) el.setAttribute('data-filled', '');
+  }
+  function scan(){
+    var list = document.querySelectorAll('image-slot[src]:not([data-filled])');
+    for (var i = 0; i < list.length; i++) fix(list[i]);
+  }
+  new MutationObserver(function(recs){
+    for (var i = 0; i < recs.length; i++) {
+      var r = recs[i];
+      if (r.type === 'attributes') { if (r.target.tagName === 'IMAGE-SLOT') fix(r.target); }
+      else scan();
+    }
+  }).observe(document.documentElement, {
+    subtree: true, childList: true, attributes: true, attributeFilter: ['src', 'data-filled']
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan);
+  else scan();
+})();
+</script>
+<!-- /slot-fill -->
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>ADMI School — Вчимо не зубрити, а розуміти!</title>
+<meta name="description" content="Підготовка до НМТ та контрольних, покращення оцінок і цікаве навчання. Безкоштовне визначення рівня знань! Записуйтесь на урок ❤️">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="canonical" href="https://www.admischool.online/">
+<meta name="theme-color" content="#1d3b64">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ADMI School">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:url" content="https://www.admischool.online/">
+<meta property="og:title" content="ADMI School — Вчимо не зубрити, а розуміти!">
+<meta property="og:description" content="Підготовка до НМТ та контрольних, покращення оцінок і цікаве навчання. Безкоштовне визначення рівня знань! Записуйтесь на урок ❤️">
+<meta property="og:image" content="https://www.admischool.online/assets/og-admi.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ADMI School — Вчимо не зубрити, а розуміти!">
+<meta name="twitter:description" content="Підготовка до НМТ та контрольних, покращення оцінок і цікаве навчання. Безкоштовне визначення рівня знань! Записуйтесь на урок ❤️">
+<meta name="twitter:image" content="https://www.admischool.online/assets/og-admi.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "ADMI School",
+  "slogan": "Вчимо не зубрити, а розуміти!",
+  "url": "https://www.admischool.online/",
+  "logo": "https://www.admischool.online/assets/og-admi.png",
+  "email": "contact@admischool.online",
+  "telephone": "+380755458103",
+  "sameAs": [
+    "https://www.instagram.com/admischool",
+    "https://t.me/admischool_online"
+  ]
+}
+</script>
+<script src="image-slot.js" defer></script>
+<script>
+(function(){
+  var revealed = false, tries = 0; /* harden-reveal: tools/postprocess.py */
+  function reveal(){
+    if (revealed) return;
+    var root = document.querySelector('.r-root');
+    // Якщо рантайм ще не відрендерив розмітку — пробуємо далі. Без цього
+    // спрацювання «на порожньо» витрачало тригер, і коли всі три (шрифти,
+    // 2.5 с, load) траплялися до рендеру, сторінка назавжди лишалася на
+    // opacity:0 — невидимою.
+    if (!root) { if (tries++ < 100) setTimeout(reveal, 100); return; }
+    revealed = true;
+    document.documentElement.classList.add('is-ready');
+  }
+  function start(){
+    var fonts = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    // показуємо, коли шрифти готові — але не чекаємо довше 1.2 с
+    Promise.race([fonts, new Promise(function(r){ setTimeout(r, 1200); })])
+      .then(function(){ requestAnimationFrame(reveal); });
+    // страхувальні спрацювання
+    setTimeout(reveal, 2500);
+    window.addEventListener('load', reveal);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; background:#fff; }
+  ::-webkit-scrollbar { height:8px; width:8px; }
+  ::-webkit-scrollbar-thumb { background:#cdd2c6; border-radius:8px; }
+  image-slot { color: rgba(0,0,0,.45); }
+
+  /* Плавна поява замість блимання: одна керована анімація замість десятків стрибків */
+  html:not(.is-ready) .r-root { opacity:0; } .r-root { transition:opacity .45s ease; }
+  .r-root.is-ready { opacity:1; }
+  @media (prefers-reduced-motion:reduce){ .r-root{transition:none;} }
+  /* картинки проявляються, а не з'являються ривком */
+  image-slot { transition:opacity .35s ease; }
+  /* фіксовані підкладки, щоб не було білих спалахів під фото */
+  .subj-slider > div { background:#dbe3ec !important; }
+  .subj-slider::-webkit-scrollbar { height:6px; }
+  .subj-slider::-webkit-scrollbar-thumb { background:#c3d4e6; border-radius:6px; }
+  @media (max-width:600px){ .subj-slider > div { flex:0 0 78% !important; } .subj-nav { display:none !important; } }
+
+  /* Hero: title → photo → paragraph on mobile; two columns on desktop */
+  .r-root .hero-grid{display:grid; grid-template-columns:1.05fr 0.95fr; grid-template-areas:"top photo" "bot photo"; column-gap:56px; align-items:center;}
+
+  /* ---------- RESPONSIVE (tablet / phone) ---------- */
+  @media (max-width:1024px){
+    .r-root [style*="max-width: 1240px"]{padding-left:30px !important; padding-right:30px !important;}
+    .r-root h1{font-size:46px !important;}
+    .r-root h2{font-size:34px !important;}
+    .r-root [style*="padding: 64px"]{padding:44px !important;}
+    .r-root [style*="repeat(3, 1fr)"]{grid-template-columns:repeat(2,1fr) !important;}
+  }
+  @media (max-width:820px){
+    .r-root [style*="gap: 34px"]{display:none !important;}
+    .r-root .hero-grid{grid-template-columns:1fr !important; grid-template-areas:"top" "photo" "bot" !important; column-gap:0 !important; row-gap:18px;}
+    .r-root [style*="align-items: flex-end; justify-content: center"]{height:300px !important; margin-top:10px;}
+    .r-root [style*="grid-template-columns: 1fr 1fr"]{grid-template-columns:1fr !important;}
+    .r-root [style*="1.6fr 1fr 1fr 1fr"]{grid-template-columns:1fr 1fr !important;}
+    .r-root [style*="justify-content: space-between; margin-bottom: 32px"]{flex-direction:column !important; align-items:flex-start !important;}
+    .r-root [style*="repeat(4, 1fr)"]{grid-template-columns:repeat(2,1fr) !important;}
+  }
+  @media (max-width:600px){
+    .r-root [style*="max-width: 1240px"]{padding-left:16px !important; padding-right:16px !important;}
+    .r-root h1{font-size:33px !important;}
+    .r-root h2{font-size:26px !important;}
+    .r-root [style*="padding: 64px"]{padding:26px !important; border-radius:28px !important;}
+    .r-root [style*="align-items: flex-end; justify-content: center"]{height:240px !important;}
+    .r-root [style*="rotate(3deg)"]{top:-6px !important;}
+    .r-root p[data-om-id="ceb8e35d:45"]{display:none !important;}
+    .r-root .hero-lede{display:none !important;}
+    .r-root .fmt-grid{grid-template-columns:1fr !important;}
+    .r-root [style*="repeat(3, 1fr)"]{grid-template-columns:1fr !important;}
+    .r-root [style*="font-size: 84px"]{font-size:60px !important;}
+    .r-root [style*="height: 78px"]{height:64px !important;}
+  }
+</style>
+</helmet>
+
+<div data-screen-label="Драйв — десктоп" class="r-root" style="position:relative; font-family:'Montserrat',sans-serif; color:#1d3b64; background:transparent; width:100%; overflow-x:hidden;">
+
+  <div style="position:absolute; inset:0; z-index:-1; pointer-events:none; overflow:hidden;">
+    <svg viewBox="0 0 1000 3100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; inset:0; width:100%; height:100%;">
+      <g fill="none" stroke="#bcd6f2" stroke-width="40" stroke-linecap="round">
+        <path d="M-60 150 C180 60 360 250 560 150 C760 50 900 230 1060 130"></path>
+        <path d="M-60 400 C160 490 380 310 580 410 C780 510 920 330 1060 420"></path>
+        <path d="M-60 660 C180 570 360 760 560 660 C760 560 900 740 1060 640"></path>
+        <path d="M-60 920 C160 1010 380 830 580 930 C780 1030 920 850 1060 940"></path>
+        <path d="M-60 1180 C180 1090 360 1280 560 1180 C760 1080 900 1260 1060 1160"></path>
+        <path d="M-60 1440 C160 1530 380 1350 580 1450 C780 1550 920 1370 1060 1460"></path>
+        <path d="M-60 1700 C180 1610 360 1800 560 1700 C760 1600 900 1780 1060 1680"></path>
+        <path d="M-60 1960 C160 2050 380 1870 580 1970 C780 2070 920 1890 1060 1980"></path>
+        <path d="M-60 2220 C180 2130 360 2320 560 2220 C760 2120 900 2300 1060 2200"></path>
+        <path d="M-60 2480 C160 2570 380 2390 580 2490 C780 2590 920 2410 1060 2500"></path>
+        <path d="M-60 2740 C180 2650 360 2840 560 2740 C760 2640 900 2820 1060 2720"></path>
+        <path d="M-60 3000 C160 3090 380 2910 580 3010 C780 3110 920 2930 1060 3020"></path>
+      </g>
+    </svg>
+  </div>
+
+  <!-- NAV -->
+  <div style="position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.9); backdrop-filter:blur(10px); border-bottom:1px solid #eceee8;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px; height:78px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="assets/logo-admi-final.png" alt="ADMI School" style="height:52px; width:auto; display:block;" />
+      </div>
+      <div style="display:flex; align-items:center; gap:34px;">
+        <a href="#subjects" style="text-decoration:none; color:#3a403a; font-weight:600; font-size:15px;">Предмети</a>
+        <a href="#process" style="text-decoration:none; color:#3a403a; font-weight:600; font-size:15px;">Як працюємо</a>
+        <a href="#teachers" style="text-decoration:none; color:#3a403a; font-weight:600; font-size:15px;">Формати</a>
+        <a href="#reviews" style="text-decoration:none; color:#3a403a; font-weight:600; font-size:15px;">Відгуки</a>
+      </div>
+      <a href="#form" style="background:#1d3b64; color:#fff; text-decoration:none; font-weight:700; font-size:15px; padding:13px 24px; border-radius:999px;">Записатись</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div style="max-width:1240px; margin:0 auto; padding:36px 40px 0;">
+    <div class="hero-grid" style="border-radius: 40px; padding: 64px; align-items: center; background-color: #EAF1F8">
+      <div style="grid-area: top;">
+        <span style="display:inline-block; white-space:nowrap; background:#fff; color:#1d3b64; font-weight:800; font-size:14px; padding:10px 18px; border-radius:999px; margin-bottom:26px; box-shadow:0 6px 18px rgba(20,30,15,0.08); transform:rotate(-2deg);">🚀 Хочеш 180+ на НМТ?</span>
+        <h1 style="margin:0; font-size:60px; line-height:1.05; font-weight:900; letter-spacing:-0.03em;">Розуміння, впевненість і <span style="background:#4c8eb4; padding:0 12px; border-radius:12px; display:inline-block; transform:rotate(-1deg);">жага вчитися</span></h1>
+      </div>
+      <div style="grid-area: bot;">
+        <p class="hero-lede" style="margin:22px 0 34px; font-size:17px; line-height:1.5; color:#4a514a; font-weight:600; max-width:530px;">Ми вчимо не зубрити, а розуміти. Допомагаємо впевнено закривати прогалини, готуватися до контрольних та НМТ і бачити реальний результат.</p>
+        <div style="margin-bottom:16px;">
+          <a href="#form" style="display:block; text-align:center; background:#1d3b64; color:#fff; text-decoration:none; font-weight:800; font-size:17px; padding:19px 36px; border-radius:999px;">Записатись на пробний урок</a>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:30px;">
+          <div style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:2px solid #4c8eb4; border-radius:999px; padding:9px 18px; box-shadow:0 6px 18px rgba(29,59,100,0.08);">
+            <span data-om-id="12edcf4f:49" style="font-size: 14px; font-weight: 700; color: rgb(74, 81, 74);">Заняття від</span>
+            <span data-om-id="12edcf4f:50" style="font-size: 19px; font-weight: 900; color: rgb(29, 59, 100);">200 грн</span>
+            <span data-om-id="12edcf4f:51" style="font-size: 14px; font-weight: 700; color: rgb(74, 81, 74);">/ год</span>
+          </div>
+          <div style="display:inline-flex; align-items:center; gap:8px; background:#eaf1f8; border-radius:999px; padding:9px 18px;">
+            <span style="font-size:15px;">👥</span>
+            <span style="font-size:14px; font-weight:700; color:#1d3b64;">Індивідуальні та групові заняття</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="display:flex;">
+            <span style="width:38px; height:38px; border-radius:50%; background:#cfe3a8; border:2.5px solid #eaf1f8;"></span>
+            <span style="width:38px; height:38px; border-radius:50%; background:#f4c9d3; border:2.5px solid #eaf1f8; margin-left:-12px;"></span>
+            <span style="width:38px; height:38px; border-radius:50%; background:#bcd3f5; border:2.5px solid #eaf1f8; margin-left:-12px;"></span>
+            <span style="width:38px; height:38px; border-radius:50%; background:#f6d8b0; border:2.5px solid #eaf1f8; margin-left:-12px;"></span>
+          </div>
+          <span style="font-size:14.5px; font-weight:700; color:#3a403a;">100+ учнів уже навчаються в ADMI School</span>
+        </div>
+      </div>
+      <div style="grid-area: photo; position: relative; display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 100%">
+        <image-slot id="dk-hero-teen" shape="rect" fit="contain" src="hero.webp" placeholder="перетягни фото підлітка 12–13 без фону (PNG)" style="position: absolute; inset: 0; width: 100%; height: 100%; transform-origin: bottom center"></image-slot>
+        <span style="position: absolute; top: 40px; right: 18px; background: #fff; font-weight: 800; font-size: 14px; color: #1d3b64; padding: 10px 16px; border-radius: 999px; transform: rotate(3deg); box-shadow: 0 8px 22px rgba(0,0,0,0.2); pointer-events: none">Впевненість ↑</span>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div style="max-width:1240px; margin:0 auto; padding:36px 40px 0;">
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+      <div style="background:#4c8eb4; border-radius:26px; padding:28px 24px;">
+        <div style="font-weight:900; font-size:42px; line-height:1;">93%</div>
+        <div style="font-size:14px; font-weight:700; color:#eef4fa; margin-top:8px;">учнів краще розуміють матеріал</div>
+      </div>
+      <div style="background:#FFE6C9; border-radius:26px; padding:28px 24px;">
+        <div style="font-weight:900; font-size:42px; line-height:1;">8/10</div>
+        <div style="font-size:14px; font-weight:700; color:#7a5a2e; margin-top:8px;">почуваються впевненіше на уроках</div>
+      </div>
+      <div style="background:#DCEBFF; border-radius:26px; padding:28px 24px;">
+        <div style="font-weight:900; font-size:42px; line-height:1;">+40%</div>
+        <div style="font-size:14px; font-weight:700; color:#2e5388; margin-top:8px;">вища активність на заняттях</div>
+      </div>
+      <div style="background:#FCE0E8; border-radius:26px; padding:28px 24px;">
+        <div style="font-weight:900; font-size:42px; line-height:1;">100+</div>
+        <div style="font-size:14px; font-weight:700; color:#8a3656; margin-top:8px;">учнів навчаються в ADMI School</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECTS -->
+  <div id="subjects" style="max-width:1240px; margin:0 auto; padding:90px 40px 0;">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:32px; gap:24px;">
+      <div>
+        <h2 style="margin:0 0 8px; font-size:46px; font-weight:900; letter-spacing:-0.02em;">Обери свій <span style="background:#4c8eb4; padding:0 10px; border-radius:10px;">предмет</span></h2>
+        <p style="margin:0; font-size:17px; color:#4a514a; font-weight:600;">Підберемо репетитора під твій рівень і ціль.</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <a href="#form" style="white-space:nowrap; color:#1d3b64; text-decoration:none; font-weight:800; font-size:15px; padding:14px 24px; border-radius:999px; border:2px solid #e0e4da;">Не знайшов предмет? →</a>
+        <div class="subj-nav" style="display:flex; gap:8px;">
+          <button type="button" data-dir="prev" onClick="{{ subjPrev }}" aria-label="Попередній предмет" style-hover="background:#1d3b64; border-color:#1d3b64; color:#fff;" style="width:48px; height:48px; border-radius:50%; border:2px solid #d7e2ee; background:#fff; color:#1d3b64; font-size:19px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .18s ease;">←</button>
+          <button type="button" data-dir="next" onClick="{{ subjNext }}" aria-label="Наступний предмет" style-hover="background:#1d3b64; border-color:#1d3b64; color:#fff;" style="width:48px; height:48px; border-radius:50%; border:2px solid #d7e2ee; background:#fff; color:#1d3b64; font-size:19px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .18s ease;">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="subj-slider" style="display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom:8px;">
+      <sc-for list="{{ subjects }}" as="s" hint-placeholder-count="8">
+        <div style="position:relative; flex:0 0 288px; scroll-snap-align:start; border-radius:26px; overflow:hidden; height:240px; background:#e9ece4;">
+          <image-slot id="{{ s.slot }}" shape="rect" src="{{ s.img }}" placeholder="фото" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+          <div style="position:absolute; inset:0; pointer-events:none; background:{{ s.grad }};"></div>
+          <div style="position:absolute; left:20px; right:20px; bottom:20px; pointer-events:none;">
+            <div style="font-weight:900; font-size:21px; line-height:1.15; overflow-wrap:anywhere; color:#fff; text-shadow:0 1px 8px rgba(0,0,0,0.28);">{{ s.name }}</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.92); font-weight:700; margin-top:6px;">{{ s.tag }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- PROCESS -->
+  <div id="process" style="max-width:1240px; margin:0 auto; padding:90px 40px 0;">
+    <div style="background:#1d3b64; border-radius:40px; padding:64px;">
+      <h2 style="margin:0 0 12px; font-size:46px; font-weight:900; letter-spacing:-0.02em; color:#fff;">Всього <span style="background:#4c8eb4; color:#1d3b64; padding:0 12px; border-radius:10px;">4 кроки</span> до результату</h2>
+      <p style="margin:0 0 48px; font-size:17px; color:#a9aea6; font-weight:600;">Простий шлях від заявки до перших успіхів.</p>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px;">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+          <div>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:58px; height:58px; border-radius:50%; background:#4c8eb4; font-weight:900; font-size:22px; color:#fff; margin-bottom:20px;">{{ st.n }}</span>
+            <div style="font-weight:800; font-size:20px; color:#fff; margin-bottom:8px;">{{ st.title }}</div>
+            <div style="font-size:15px; line-height:1.5; color:#a9aea6; font-weight:500;">{{ st.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATS -->
+  <div id="teachers" style="max-width:1240px; margin:0 auto; padding:90px 40px 0;">
+    <h2 style="margin:0 0 8px; font-size:46px; font-weight:900; letter-spacing:-0.02em;">Обери <span style="background:#4c8eb4; padding:0 10px; border-radius:10px;">формат</span></h2>
+    <p style="margin:0 0 32px; font-size:17px; color:#4a514a; font-weight:600;">Один предмет — три способи вчитися. Змінити формат можна будь-коли.</p>
+    <div class="fmt-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:stretch;">
+      <sc-for list="{{ formats }}" as="f" hint-placeholder-count="3">
+        <div style="position:relative; display:flex; flex-direction:column; background:{{ f.bg }}; border:2px solid {{ f.border }}; border-radius:28px; padding:32px 28px;">
+          <span style="display:inline-block; align-self:flex-start; font-size:12px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:{{ f.tagColor }}; background:{{ f.tagBg }}; padding:7px 14px; border-radius:999px; margin-bottom:20px;">{{ f.badge }}</span>
+          <div style="font-weight:900; font-size:26px; line-height:1.15; color:{{ f.title }}; margin-bottom:8px;">{{ f.name }}</div>
+          <p style="margin:0 0 22px; font-size:14.5px; line-height:1.55; color:{{ f.body }}; font-weight:500;">{{ f.who }}</p>
+          <div style="display:flex; align-items:baseline; gap:7px; margin-bottom:22px;">
+            <span style="font-size:14px; font-weight:700; color:{{ f.body }};">від</span>
+            <span style="font-size:34px; font-weight:900; color:{{ f.title }};">{{ f.price }}</span>
+            <span style="font-size:14px; font-weight:700; color:{{ f.body }};">грн / год</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:11px; margin-bottom:26px;">
+            <sc-for list="{{ f.perks }}" as="p" hint-placeholder-count="3">
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="flex:0 0 auto; width:21px; height:21px; border-radius:50%; background:{{ f.dot }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; margin-top:1px;">✓</span>
+                <span style="font-size:14px; line-height:1.45; font-weight:600; color:{{ f.body }};">{{ p }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <a href="#form" style="margin-top:auto; display:block; text-align:center; background:{{ f.btnBg }}; color:{{ f.btnColor }}; text-decoration:none; font-weight:800; font-size:15.5px; padding:16px; border-radius:999px;">{{ f.cta }}</a>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- PROOF BAND -->
+  <div style="max-width:1240px; margin:0 auto; padding:90px 40px 0;">
+    <div style="position:relative; border-radius:40px; overflow:hidden; min-height:380px; display:flex; align-items:center;">
+      <image-slot id="dk-proof" shape="rect" src="{{ proofImg }}" placeholder="фото: учень святкує результат" style="position:absolute; inset:0; width:100%; height:100%; filter:blur(5px); transform:scale(1.1);"></image-slot>
+      <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(15,17,12,0.92) 0%, rgba(15,17,12,0.82) 50%, rgba(15,17,12,0.55) 100%);"></div>
+      <div style="position:relative; padding:64px; max-width:680px;">
+        <div style="font-weight:900; font-size:84px; line-height:1; color:#4c8eb4;">93%</div>
+        <h2 style="margin:12px 0 14px; font-size:38px; font-weight:900; line-height:1.1; color:#fff;">наших учнів кажуть, що нарешті розуміють предмет</h2>
+        <p style="margin:0 0 30px; font-size:17px; line-height:1.55; color:#cfd3ca; font-weight:500; max-width:520px;">Зрозумілі пояснення, підготовка до контрольних і регулярна практика — оцінки ростуть, а стрес перед школою зникає.</p>
+        <a href="#form" style="display:inline-flex; align-items:center; gap:10px; background:#4c8eb4; color:#fff; border-radius:999px; padding:18px 34px; text-decoration:none; font-size:17px; font-weight:800;">Хочу такий результат →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div id="reviews" style="max-width:1240px; margin:0 auto; padding:90px 40px 0;">
+    <h2 style="margin:0 0 32px; font-size:46px; font-weight:900; letter-spacing:-0.02em;">Що кажуть <span style="background:#4c8eb4; padding:0 10px; border-radius:10px;">учні та батьки</span></h2>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+      <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+        <div style="background:#F6F7F4; border-radius:26px; padding:26px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <span style="width:50px; height:50px; border-radius:50%; overflow:hidden; flex-shrink:0; position:relative;">
+              <image-slot id="{{ r.slot }}" shape="circle" src="{{ r.img }}" placeholder="фото" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+            </span>
+            <div>
+              <div style="font-weight:800; font-size:16px;">{{ r.name }}</div>
+              <div style="font-size:12.5px; color:#8a8f86; font-weight:600;">{{ r.handle }}</div>
+            </div>
+            <span style="margin-left:auto; font-size:14px;">⭐⭐⭐⭐⭐</span>
+          </div>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:#3a403a; font-weight:500;">{{ r.text }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div id="form" style="max-width:1240px; margin:0 auto; padding:90px 40px 0;">
+    <div style="background:#4c8eb4; border-radius:40px; padding:64px; display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+      <div>
+        <h2 style="margin:0 0 16px; font-size:46px; font-weight:900; letter-spacing:-0.02em; color:#fff;">Залишай заявку 👋</h2>
+        <p style="margin:0 0 28px; font-size:18px; color:#eef4fa; font-weight:600; line-height:1.5;">Зателефонуємо протягом 15 хвилин, проведемо безкоштовний тест рівня й підберемо репетитора саме під тебе.</p>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:center; gap:12px; font-size:16px; font-weight:700; color:#fff;"><span style="width:26px; height:26px; border-radius:50%; background:#12294a; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:15px;">✓</span> Перший пробний урок безкоштовний</div>
+          <div style="display:flex; align-items:center; gap:12px; font-size:16px; font-weight:700; color:#fff;"><span style="width:26px; height:26px; border-radius:50%; background:#12294a; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:15px;">✓</span> Безкоштовний тест рівня знань</div>
+          <div style="display:flex; align-items:center; gap:12px; font-size:16px; font-weight:700; color:#fff;"><span style="width:26px; height:26px; border-radius:50%; background:#12294a; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:15px;">✓</span> Учні з 3 по 11 клас</div>
+        </div>
+      </div>
+      <div>
+        <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}" style="background:#fff; border-radius:28px; padding:34px; display:flex; flex-direction:column; gap:13px;">
+            <input required="" name="name" placeholder="Ім'я" style="background:#F6F7F4; border:1.5px solid #eceee8; border-radius:14px; padding:17px 18px; font-size:16px; font-family:inherit; font-weight:600; outline:none;">
+            <input required="" name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength="18" onInput="{{ onPhoneInput }}" pattern="[0-9+()\- ]{9,18}" title="Введіть номер телефону, напр. +380 67 123 4567" placeholder="Телефон, напр. +380 67 123 4567" style="background:#F6F7F4; border:1.5px solid #eceee8; border-radius:14px; padding:17px 18px; font-size:16px; font-family:inherit; font-weight:600; outline:none;">
+            <select required="" name="subject" style="background:#F6F7F4; border:1.5px solid #eceee8; border-radius:14px; padding:17px 18px; font-size:16px; font-family:inherit; font-weight:600; color:#1d3b64; outline:none;">
+              <option value="">Предмет</option>
+              <sc-for list="{{ subjects }}" as="s" hint-placeholder-count="8">
+                <option value="{{ s.name }}">{{ s.name }}</option>
+              </sc-for>
+            </select>
+            <button type="submit" disabled="{{ sending }}" style="margin-top:6px; background:#1d3b64; color:#fff; border:none; border-radius:14px; padding:19px; font-size:17px; font-weight:800; font-family:inherit; cursor:pointer;">{{ submitLabel }}</button>
+            <sc-if value="{{ sendError }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:2px 0 0; font-size:13px; color:#c0392b; text-align:center; font-weight:700; line-height:1.4;">Не вдалося надіслати. Напишіть нам, будь ласка, у Telegram: <a href="https://t.me/admischool" target="_blank" rel="noopener" style="color:#c0392b; font-weight:800; text-decoration:underline;">@admischool</a></p>
+            </sc-if>
+            <p style="margin:4px 0 0; font-size:12px; color:#a0a59b; text-align:center; line-height:1.4;">Натискаючи кнопку, ти погоджуєшся з політикою конфіденційності.</p>
+          </form>
+        </sc-if>
+        <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff; border-radius:28px; padding:48px 34px; text-align:center;">
+            <div style="width:66px; height:66px; border-radius:50%; background:#4c8eb4; display:inline-flex; align-items:center; justify-content:center; font-size:32px; color:#1d3b64; margin-bottom:18px;">✓</div>
+            <h3 style="margin:0 0 8px; font-size:26px; font-weight:900; color:#1d3b64;">Заявку прийнято! 🎉</h3>
+            <p style="margin:0; font-size:16px; color:#5a615a; font-weight:600;">Скоро зателефонуємо й підберемо репетитора саме для тебе.</p>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="max-width:1240px; margin:0 auto; padding:64px 40px 50px;">
+    <div style="display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:32px; padding-bottom:36px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <img src="assets/logo-admi-final.png" alt="ADMI School" style="height:48px; width:auto; display:block;" />
+        </div>
+        <p style="margin:0; font-size:14.5px; color:#5a615a; font-weight:500; line-height:1.6; max-width:300px;">Онлайн-репетитори для підготовки до НМТ та ДПА. Учні з 3 по 11 клас.</p>
+      </div>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Навігація</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="#subjects" style="text-decoration:none; color:#5a615a; font-weight:600; font-size:14.5px;">Предмети</a>
+          <a href="#process" style="text-decoration:none; color:#5a615a; font-weight:600; font-size:14.5px;">Як працюємо</a>
+          <a href="#teachers" style="text-decoration:none; color:#5a615a; font-weight:600; font-size:14.5px;">Формати</a>
+          <a href="#reviews" style="text-decoration:none; color:#5a615a; font-weight:600; font-size:14.5px;">Відгуки</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Контакти</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:14.5px; color:#5a615a; font-weight:600;">
+          <span>+380 75 545 8103</span>
+          <span>contact@admischool.online</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Соцмережі</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="https://t.me/admischool_online" target="_blank" rel="noopener" style="font-size:14.5px; color:#5a615a; font-weight:600; text-decoration:none;">Telegram</a>
+          <a href="https://www.instagram.com/admischool" target="_blank" rel="noopener" style="font-size:14.5px; color:#5a615a; font-weight:600; text-decoration:none;">Instagram</a>
+          <span style="font-size:14.5px; color:#5a615a; font-weight:600;">TikTok</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin:24px 0 0; font-size:13px; color:#a0a59b; font-weight:500;">© 2026 ADMI School. Усі права захищені.</p>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1024}}">
+class Component extends DCLogic {
+  // Функція api/lead.js їде в цьому ж деплої, тож шлях відносний: той самий
+  // origin — ні CORS-преflight, ні залежності від сторонього проєкту.
+  static LEAD_ENDPOINT = '/api/lead';
+
+  state = { submitted: false, sending: false, sendError: false };
+
+  handlePhoneInput(e) {
+    const el = e.target;
+    // лишаємо тільки цифри й службові символи; "+" дозволений лише першим
+    let v = el.value.replace(/[^\d+()\-\s]/g, '');
+    v = v.replace(/(?!^)\+/g, '');
+    if (v !== el.value) el.value = v;
+    const digits = v.replace(/\D/g, '');
+    el.setCustomValidity(digits.length < 9 ? 'Введіть повний номер телефону' : '');
+  }
+
+  async sendLead(e) {
+    e.preventDefault();
+    const form = e.target;
+    const fd = new FormData(form);
+    const phoneEl = form.querySelector('input[name="phone"]');
+    if (phoneEl) {
+      const digits = (phoneEl.value || '').replace(/\D/g, '');
+      if (digits.length < 9) {
+        phoneEl.setCustomValidity('Введіть повний номер телефону');
+        phoneEl.reportValidity();
+        return;
+      }
+      phoneEl.setCustomValidity('');
+    }
+    const payload = {
+      name: (fd.get('name') || '').toString().trim(),
+      phone: (fd.get('phone') || '').toString().trim(),
+      subject: (fd.get('subject') || '').toString().trim(),
+      page: location.href,
+    };
+    const url = Component.LEAD_ENDPOINT;
+    if (!url) { this.setState({ submitted: true }); return; }
+    this.setState({ sending: true, sendError: false });
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('bad status ' + res.status);
+      this.setState({ submitted: true, sending: false });
+    } catch (err) {
+      this.setState({ sending: false, sendError: true });
+    }
+  }
+
+  subjEl = React.createRef();
+
+  scrollSubj(dirOrEvent) {
+    let dir = dirOrEvent;
+    if (dirOrEvent && dirOrEvent.currentTarget) {
+      dir = dirOrEvent.currentTarget.getAttribute('data-dir') === 'prev' ? -1 : 1;
+    }
+    const el = document.querySelector('.subj-slider');
+    if (!el) return;
+    const card = el.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + 18 : 300;
+    const max = el.scrollWidth - el.clientWidth;
+    const target = Math.max(0, Math.min(max, el.scrollLeft + dir * step));
+    el.scrollTo({ left: target, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const g = (r, gb, b) => `linear-gradient(to top, rgba(${r},${gb},${b},0.94) 0%, rgba(${r},${gb},${b},0.55) 42%, rgba(${r},${gb},${b},0.04) 82%)`;
+    const subjects = [
+      { name: 'Математика', tag: 'НМТ · ДПА · 3–11 клас', letter: 'М', slot: 'dk-subj-math', grad: g(74,142,180) },
+      { name: 'Програмування', tag: 'з нуля · Python, web', letter: 'П', slot: 'dk-subj-prog', grad: g(120,90,200) },
+      { name: 'Англійська мова', tag: 'НМТ · ДПА · розмовна', letter: 'A', slot: 'dk-subj-eng', grad: g(40,150,144) },
+      { name: 'Українська мова', tag: 'НМТ · ДПА · 3–11 клас', letter: 'У', slot: 'dk-subj-ukr', grad: g(214,74,116) },
+      { name: 'Історія України', tag: 'НМТ · ДПА · 5–11 клас', letter: 'І', slot: 'dk-subj-hist', grad: g(206,150,42) },
+      { name: 'Українська література', tag: 'НМТ · ДПА · 5–11 клас', letter: 'Л', slot: 'dk-subj-lit', grad: g(186,84,150) },
+      { name: 'Біологія', tag: 'НМТ · ДПА · 6–11 клас', letter: 'Б', slot: 'dk-subj-bio', grad: g(72,158,96) },
+      { name: 'Хімія', tag: 'НМТ · ДПА · 7–11 клас', letter: 'Х', slot: 'dk-subj-chem', grad: g(224,122,74) },
+    ];
+    const formats = [
+      {
+        badge: 'Найпопулярніше', name: 'Індивідуально', price: '300',
+        who: 'Повна увага педагога, темп і програма підлаштовані під дитину.',
+        perks: ['Персональний план на основі діагностики', 'Гнучкий графік — переносьте заняття', 'Щомісячний звіт батькам'],
+        cta: 'Обрати індивідуально',
+        bg: '#fff', border: '#e0e8f1', title: '#1d3b64', body: '#4a514a',
+        tagBg: '#eaf1f8', tagColor: '#1d3b64', dot: '#4c8eb4', btnBg: '#1d3b64', btnColor: '#fff',
+      },
+      {
+        badge: 'Вигідно', name: 'Міні-група 2–4 учні', price: '200',
+        who: 'Діти одного рівня вчаться разом — дешевше, а на онлайн-уроці всі в ефірі та працюють у парах.',
+        perks: ['Групи за результатами діагностики', 'Спільні задачі й розбори в чаті між уроками', 'Той самий педагог весь курс'],
+        cta: 'Обрати міні-групу',
+        bg: '#1d3b64', border: '#e0e8f1', title: '#fff', body: '#b9cbdd',
+        tagBg: '#4c8eb4', tagColor: '#fff', dot: '#4c8eb4', btnBg: '#4c8eb4', btnColor: '#fff',
+      },
+      {
+        badge: 'Випускникам', name: 'Підготовка до НМТ', price: '350',
+        who: 'Системний курс для 10–11 класу: від діагностики прогалин до впевненого результату на тесті.',
+        perks: ['Програма за офіційною специфікацією НМТ', 'Регулярні пробні тести з розбором помилок', 'Тренування таймінгу та роботи з бланками'],
+        cta: 'Готуватись до НМТ',
+        bg: '#fff', border: '#e0e8f1', title: '#1d3b64', body: '#4a514a',
+        tagBg: '#fdeee0', tagColor: '#a35d17', dot: '#4c8eb4', btnBg: '#1d3b64', btnColor: '#fff',
+      },
+    ];
+    const steps = [
+      { n: '01', title: 'Залишаєш заявку', text: 'Заповни просту форму або напиши нам у месенджер.' },
+      { n: '02', title: 'Проходиш тест рівня', text: 'Безкоштовно визначимо сильні та слабкі сторони.' },
+      { n: '03', title: 'Підбираємо репетитора', text: 'Під твою ціль, рівень знань і характер.' },
+      { n: '04', title: 'Починаєш навчання', text: 'Перший пробний урок — безкоштовний.' },
+    ];
+    const teachers = [
+      { name: 'Оксана П.', subject: 'Математика', exp: '7 років · сер. бал 192', quote: 'Покажу, що математика — це логіка, а не зубріння.', slot: 'dk-teacher-1' },
+      { name: 'Дмитро Р.', subject: 'Програмування', exp: '6 років · Python, web', quote: 'Напишемо твій перший робочий проєкт уже за місяць.', slot: 'dk-teacher-2' },
+      { name: 'Марія Л.', subject: 'Англійська', exp: '8 років · сер. бал 195', quote: 'Заговориш упевнено вже за перший місяць.', slot: 'dk-teacher-3' },
+      { name: 'Андрій К.', subject: 'Українська', exp: '6 років · сер. бал 190', quote: 'Розберемо НМТ по поличках — без паніки.', slot: 'dk-teacher-4' },
+    ];
+    const reviews = [
+      { name: 'Ірина, мама учня', handle: '9 клас · ДПА', slot: 'dk-rev-1', text: 'Син за 3 місяці підтягнув математику з 6 до 9 балів. Дякую репетитору — нарешті без сліз перед контрольними!' },
+      { name: 'Олег', handle: '11 клас · НМТ', slot: 'dk-rev-2', text: 'Склав НМТ з української на 187. Думав, нереально. Заняття реально працюють і не нудні.' },
+      { name: 'Тетяна, мама', handle: '5 клас', slot: 'dk-rev-3', text: 'Донька вперше каже, що їй подобається англійська. Репетитора підібрали ідеально під її характер.' },
+    ];
+
+    // local-photos: фото лежать у assets/photos/ (ті самі кадри, w=640, q=72,
+    // що конструктор тягнув з images.unsplash.com). Локально — бо зовнішній
+    // хост додає окреме з'єднання і затримку на 16 картинок, а кеш CDN Vercel
+    // віддає їх разом зі сторінкою. Оновлює tools/postprocess.py.
+    const U = (id) => `assets/photos/${id}.jpg`;
+    const imgBySlot = {
+      'dk-subj-math': U('photo-1635070041078-e363dbe005cb'),
+      'dk-subj-prog': U('photo-1461749280684-dccba630e2f6'),
+      'dk-subj-eng':  U('photo-1503676260728-1c00da094a0b'),
+      'dk-subj-ukr':  U('photo-1456513080510-7bf3a84b82f8'),
+      'dk-subj-hist': U('photo-1461360228754-6e81c478b882'),
+      'dk-subj-lit':  U('photo-1519682337058-a94d519337bc'),
+      'dk-subj-bio':  U('photo-1530026405186-ed1f139313f8'),
+      'dk-subj-chem': U('photo-1532187863486-abf9dbad1b69'),
+      'dk-teacher-1': U('photo-1573496359142-b8d87734a5a2'),
+      'dk-teacher-2': U('photo-1519085360753-af0119f7cbe7'),
+      'dk-teacher-3': U('photo-1494790108377-be9c29b29330'),
+      'dk-teacher-4': U('photo-1500648767791-00dcc994a43e'),
+      'dk-rev-1':     U('photo-1544005313-94ddf0286df2'),
+      'dk-rev-2':     U('photo-1539571696357-5a69c17a67c6'),
+      'dk-rev-3':     U('photo-1487412720507-e7ab37603c6f'),
+    };
+    subjects.forEach((s) => { s.img = imgBySlot[s.slot]; });
+    teachers.forEach((t) => { t.img = imgBySlot[t.slot]; });
+    reviews.forEach((r) => { r.img = imgBySlot[r.slot]; });
+
+    return {
+      subjects, steps, teachers, reviews,
+      proofImg: U('photo-1523580846011-d3a5bc25702b'),
+      formats,
+      subjRef: this.subjEl,
+      subjPrev: (e) => this.scrollSubj(e),
+      subjNext: (e) => this.scrollSubj(e),
+      submit: (e) => this.sendLead(e),
+      onPhoneInput: (e) => this.handlePhoneInput(e),
+      sending: this.state.sending,
+      sendError: this.state.sendError,
+      submitLabel: this.state.sending ? 'Надсилаємо…' : 'Підібрати репетитора',
+      submitted: this.state.submitted,
+      showForm: !this.state.submitted,
+    };
+  }
+}
+</script>
+</body>
+</html>
