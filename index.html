@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMI School</title>
+    <style>
+        body {
+            background: rgb(245, 245, 245);
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #333;
+        }
+
+        .page-frame {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 20px 40px 60px;
+        }
+
+        /* --- Шапка та Головний екран (з попереднього кроку) --- */
+        .shapka {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+        .logo h2 { margin: 0; color: #1a2a53; font-size: 1.8em; font-weight: 800; }
+        .nav-links ul { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 600; }
+        .action-button-main { background: #1a2a53; color: white; padding: 10px 25px; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; }
+
+        .hero-block {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+            background: #f8fbff;
+            padding: 50px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+        .badge-text { background: white; border: 1px solid #ddd; color: #1a2a53; display: inline-block; padding: 5px 15px; border-radius: 15px; font-weight: 700; margin-bottom: 20px; }
+        .hero-title { margin: 0 0 20px 0; font-size: 3em; color: #1a2a53; line-height: 1.1; font-weight: 800; }
+        .hero-title span { background: #5b8bb8; color: white; padding: 0 10px; border-radius: 8px; }
+        .hero-desc { font-size: 1.1em; color: #666; margin-bottom: 30px; }
+        .hero-callout-btn { background: #1a2a53; color: white; padding: 15px 35px; border: none; border-radius: 30px; font-weight: 700; font-size: 1.1em; cursor: pointer; margin-bottom: 15px; }
+
+        .stats-block {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        .stat-card { border-radius: 15px; padding: 25px; display: flex; flex-direction: column; gap: 5px; }
+        .stat-card.blue { background: #5b8bb8; color: white; }
+        .stat-card.orange { background: #fff3e0; color: #ef6c00; }
+        .stat-card.teal { background: #e0f2f1; color: #00695c; }
+        .stat-card.pink { background: #fce4ec; color: #c2185b; }
+        .stat-number { font-size: 2.5em; font-weight: 900; margin: 0; }
+        .stat-text { font-size: 1em; margin: 0; font-weight: 600; opacity: 0.9; }
+
+        /* --- НОВИЙ БЛОК: Предмети --- */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .section-title {
+            font-size: 2.5em;
+            color: #1a2a53;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+        }
+        .section-title span {
+            background: #6a9bc2;
+            color: white;
+            padding: 0 10px;
+            border-radius: 8px;
+        }
+        .section-subtitle {
+            color: #666;
+            margin: 0;
+            font-size: 1.1em;
+        }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-secondary {
+            border: 1px solid #ddd;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+        }
+        .nav-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        .subject-card {
+            height: 220px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background-color: #ddd; /* Заглушка, якщо немає фото */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            text-decoration: none;
+        }
+        /* Градієнт для читабельності тексту на фото */
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 70%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            z-index: 1;
+        }
+        .subject-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+        .subject-content h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.4em;
+            font-weight: 800;
+        }
+        .subject-content p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Особливі кольори градієнтів для кожної картки (як на макеті) */
+        .card-math::before { background: linear-gradient(to top, rgba(38, 88, 124, 0.9), transparent); }
+        .card-prog::before { background: linear-gradient(to top, rgba(94, 63, 153, 0.9), transparent); }
+        .card-eng::before { background: linear-gradient(to top, rgba(54, 133, 116, 0.9), transparent); }
+        .card-ukr::before { background: linear-gradient(to top, rgba(184, 76, 102, 0.9), transparent); }
+
+        /* --- НОВИЙ БЛОК: 4 Кроки --- */
+        .steps-section {
+            background: #1e3a5f;
+            border-radius: 25px;
+            padding: 50px;
+            color: white;
+        }
+        .steps-title {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+        }
+        .steps-title span {
+            background: #5b8bb8;
+            padding: 0 10px;
+            border-radius: 8px;
+        }
+        .steps-subtitle {
+            color: #a0b8d0;
+            margin: 0 0 40px 0;
+            font-size: 1.1em;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        .step-num {
+            width: 50px;
+            height: 50px;
+            background: #a0b8d0;
+            color: #1e3a5f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        .step-item h4 {
+            font-size: 1.2em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        .step-item p {
+            color: #a0b8d0;
+            margin: 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        /* --- Адаптивність --- */
+        @media (max-width: 1024px) {
+            .subjects-grid, .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-block { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .page-frame { padding: 15px; }
+            .shapka { flex-direction: column; gap: 15px; }
+            .subjects-grid, .steps-grid, .stats-block { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .steps-section { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-frame">
+
+    <!-- Шапка -->
+    <div class="shapka">
+        <div class="logo">
+            <h2>TEST SCHOOL</h2>
+        </div>
+        <div class="nav-links">
+            <ul>
+                <li><a href="#">Предмети</a></li>
+                <li><a href="#">Як працюємо</a></li>
+                <li><a href="#">Формати</a></li>
+                <li><a href="#">Відгуки</a></li>
+            </ul>
+        </div>
+        <button class="action-button-main">Записатись</button>
+    </div>
+
+    <!-- Головний екран -->
+    <div class="hero-block">
+        <div class="hero-left">
+            <span class="badge-text">Хочеш 180+ на НМТ?</span>
+            <h1 class="hero-title">Розуміння, впевненість і<br><span>жага вчитися</span></h1>
+            <p class="hero-desc">Ми вчимо не зубрити, а розуміти. Допомагаємо успішно закривати прогалини, готуватися до контрольних та НМТ і бачити реальний результат.</p>
+            <button class="hero-callout-btn">Записатись на пробний урок</button>
+        </div>
+        <div class="hero-right">
+            <!-- Тут має бути фото учня -->
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="stats-block">
+        <div class="stat-card blue">
+            <h3 class="stat-number">93%</h3>
+            <p class="stat-text">учнів краще розуміють матеріал</p>
+        </div>
+        <div class="stat-card orange">
+            <h3 class="stat-number">8/10</h3>
+            <p class="stat-text">почуваються впевненіше на уроках</p>
+        </div>
+        <div class="stat-card teal">
+            <h3 class="stat-number">+40%</h3>
+            <p class="stat-text">вища активність на заняттях</p>
+        </div>
+        <div class="stat-card pink">
+            <h3 class="stat-number">100+</h3>
+            <p class="stat-text">учнів навчаються в ADMI School</p>
+        </div>
+    </div>
+    
+    <!-- Блок Предмети -->
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Обери свій <span>предмет</span></h2>
+            <p class="section-subtitle">Підберемо репетитора під твій рівень і ціль.</p>
+        </div>
+        <div class="header-controls">
+            <a href="#" class="btn-secondary">Не знайшов предмет? &rarr;</a>
+            <button class="nav-arrow">&larr;</button>
+            <button class="nav-arrow">&rarr;</button>
+        </div>
+    </div>
+
+    <div class="subjects-grid">
+        <!-- Додай правильні шляхи до своїх картинок у url() -->
+        <a href="#" class="subject-card card-math" style="background-image: url('img/math-bg.jpg');">
+            <div class="subject-content">
+                <h3>Математика</h3>
+                <p>НМТ • ДПА • 3-11 клас</p>
+            </div>
+        </a>
+        <a href="#" class="subject-card card-prog" style="background-image: url('img/prog-bg.jpg');">
+            <div class="subject-content">
+                <h3>Програмування</h3>
+                <p>з нуля • Python, web</p>
+            </div>
+        </a>
+        <a href="#" class="subject-card card-eng" style="background-image: url('img/eng-bg.jpg');">
+            <div class="subject-content">
+                <h3>Англійська мова</h3>
+                <p>НМТ • ДПА • розмовна</p>
+            </div>
+        </a>
+        <a href="#" class="subject-card card-ukr" style="background-image: url('img/ukr-bg.jpg');">
+            <div class="subject-content">
+                <h3>Українська мова</h3>
+                <p>НМТ • ДПА • 3-11 клас</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Блок 4 Кроки -->
+    <div class="steps-section">
+        <h2 class="steps-title">Всього <span>4 кроки</span> до результату</h2>
+        <p class="steps-subtitle">Простий шлях від заявки до перших успіхів.</p>
+        
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-num">01</div>
+                <h4>Залишаєш заявку</h4>
+                <p>Заповни просту форму або напиши нам у месенджер.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">02</div>
+                <h4>Проходиш тест рівня</h4>
+                <p>Безкоштовно визначимо сильні та слабкі сторони.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">03</div>
+                <h4>Підбираємо репетитора</h4>
+                <p>Під твою ціль, рівень знань і характер.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">04</div>
+                <h4>Починаєш навчання</h4>
+                <p>Перший пробний урок — безкоштовний.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
