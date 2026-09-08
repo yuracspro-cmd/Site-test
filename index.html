@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> World of languages</title>
     <style>
+
+        html, body {
+            scroll-behavior: smooth !important;
+        }
+
         body {
             background: linear-gradient(135deg, #6e8cc4 0%, #6593d4 100%);
             background-attachment: fixed; /* Фон не дергается при прокрутке */
@@ -246,6 +251,77 @@
                 max-width: 100%;
             }
         }
+
+        /* --- СТИЛИ ДЛЯ ОТЗЫВОВ --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .review-card {
+            background: #ffffff;
+            border: 1px solid #e8eeef;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(26, 42, 83, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .review-stars {
+            color: #ffb400; /* Яркий золотой цвет */
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .review-text {
+            color: #4a5568;
+            font-size: 1.05em;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            background: #1a2a53; /* Темно-синий кружок */
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .author-info strong {
+            display: block;
+            color: #1a2a53;
+            font-size: 1em;
+            font-weight: 700;
+        }
+
+        .author-info span {
+            color: #718096;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 768px) {
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -262,7 +338,7 @@
                 <li><a href="#">Предмети</a></li>
                 <li><a href="#">Як працюємо</a></li>
                 <li><a href="#">Формати</a></li>
-                <li><a href="#">Відгуки</a></li>
+                <li><a href="#reviews">Відгуки</a></li>
             </ul>
         </div>
         <button class="action-button-main">Записатись</button>
@@ -364,7 +440,67 @@
         </div>
     </div>
 
+    <!-- Блок Відгуки -->
+    <div id="reviews" style="margin-top: 60px;">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Відгуки <span>наших учнів</span></h2>
+                <p class="section-subtitle">Реальні історії успіху та враження від навчання.</p>
+            </div>
+        </div>
+
+        <div class="reviews-grid">
+            <!-- Отзыв 1 -->
+            <div class="review-card">
+                <div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">«Чудова школа! За 2 місяці підтягнула англійську до B2. Дуже подобається, що на уроках ми постійно розмовляємо, а не просто зубримо правила.»</p>
+                </div>
+                <div class="review-author">
+                    <div class="author-avatar">А</div>
+                    <div class="author-info">
+                        <strong>Анна Ковальчук</strong>
+                        <span>Англійська мова • B2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Отзыв 2 -->
+            <div class="review-card">
+                <div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">«Готувався до здачі чеської мови. Репетитор підібраний ідеально під мій графік. Здав екзамен з першого разу!»</p>
+                </div>
+                <div class="review-author">
+                    <div class="author-avatar">М</div>
+                    <div class="author-info">
+                        <strong>Максим Мельник</strong>
+                        <span>Чеська мова</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 </body>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+</script>
+
 </html>
