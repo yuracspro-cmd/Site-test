@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> World of languages</title>
+    <title>World of languages</title>
     <style>
 
         html, body {
@@ -12,7 +12,7 @@
 
         body {
             background: linear-gradient(135deg, #6e8cc4 0%, #6593d4 100%);
-            background-attachment: fixed; /* Фон не дергается при прокрутке */
+            background-attachment: fixed;
             margin: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: #333;
@@ -70,9 +70,8 @@
             font-weight: 700; 
         }
 
-        /* ТУТ НАСТРАИВАЕТСЯ ОТСТУП ДЛЯ ЗАГОЛОВКА */
         .hero-title { 
-            margin: 25px 0; /* 25px сверху и снизу от заголовка */
+            margin: 25px 0;
             font-size: 3em; 
             color: #1a2a53; 
             line-height: 1.2; 
@@ -82,7 +81,6 @@
         .hero-desc { font-size: 1.1em; color: #666; margin-bottom: 30px; line-height: 1.5; }
         .hero-callout-btn { background: #1a2a53; color: white; padding: 15px 35px; border: none; border-radius: 30px; font-weight: 700; font-size: 1.1em; cursor: pointer; }
 
-        /* Ограничение картинки, чтобы она не ломала мобильную верстку */
         .hero-right img {
             max-width: 100%;
             height: auto;
@@ -186,72 +184,6 @@
         .step-item h4 { font-size: 1.2em; margin: 0 0 10px 0; font-weight: 700; }
         .step-item p { color: #a0b8d0; margin: 0; font-size: 0.95em; line-height: 1.5; }
 
-        /* ========================================================= */
-        /* --- ПРОСТАЯ И ПОНЯТНАЯ АДАПТИВНОСТЬ --- */
-        /* ========================================================= */
-
-        /* 1. ПЛАНШЕТЫ (Ширина экрана меньше 1024px) */
-        @media (max-width: 1024px) {
-            .hero-block { 
-                grid-template-columns: 1fr; /* Картинка становится под текстом */
-                padding: 35px;
-            }
-            .hero-right {
-                text-align: center;
-            }
-            .hero-right img {
-                margin: 0 auto;
-                max-width: 80%; /* Уменьшаем картинку на планшете */
-            }
-            /* Показываем карточки в 2 колонки вместо 4 */
-            .subjects-grid, 
-            .steps-grid, 
-            .stats-block { 
-                grid-template-columns: repeat(2, 1fr); 
-            }
-        }
-
-        /* 2. ТЕЛЕФОНЫ (Ширина экрана меньше 768px) */
-        @media (max-width: 768px) {
-            .page-frame { 
-                padding: 15px; 
-                border-radius: 0; /* На мобилках убираем внешний радиус */
-            }
-            
-            /* Шапка становится вертикальной */
-            .shapka { 
-                flex-direction: column; 
-                gap: 20px; 
-                text-align: center; 
-            }
-            .nav-links ul { 
-                flex-wrap: wrap; 
-                justify-content: center; 
-                gap: 15px; 
-            }
-
-            /* Уменьшаем слишком большие заголовки под экран смартфона */
-            .hero-title { font-size: 2em; }
-            .section-title, .steps-title { font-size: 1.8em; }
-            .hero-block { padding: 25px 15px; }
-            .steps-section { padding: 30px 20px; }
-
-            /* Всё выстраивается строго в 1 колонку */
-            .subjects-grid, 
-            .steps-grid, 
-            .stats-block { 
-                grid-template-columns: 1fr; 
-            }
-
-            .section-header { 
-                flex-direction: column; 
-                align-items: flex-start; 
-            }
-            .hero-right img {
-                max-width: 100%;
-            }
-        }
-
         /* --- СТИЛИ ДЛЯ ОТЗЫВОВ --- */
         .reviews-grid {
             display: grid;
@@ -272,7 +204,7 @@
         }
 
         .review-stars {
-            color: #ffb400; /* Яркий золотой цвет */
+            color: #ffb400;
             font-size: 1.3em;
             margin-bottom: 15px;
             letter-spacing: 3px;
@@ -294,7 +226,7 @@
         .author-avatar {
             width: 48px;
             height: 48px;
-            background: #1a2a53; /* Темно-синий кружок */
+            background: #1a2a53;
             color: #ffffff;
             border-radius: 50%;
             display: flex;
@@ -317,10 +249,83 @@
             font-size: 0.85em;
         }
 
+        /* --- ВСПЛЫВАЮЩЕЕ ОКНО (POPUP) --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none; border: none;
+            font-size: 1.5em; cursor: pointer;
+            color: #888;
+        }
+
+        .modal-box h3 { margin-top: 0; color: #1a2a53; font-size: 1.6em; }
+        .modal-box p { color: #666; font-size: 0.95em; margin-bottom: 20px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 0.9em; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1em;
+            box-sizing: border-radius;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #1a2a53;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* --- АДАПТИВНОСТЬ --- */
+        @media (max-width: 1024px) {
+            .hero-block { grid-template-columns: 1fr; padding: 35px; }
+            .hero-right { text-align: center; }
+            .hero-right img { margin: 0 auto; max-width: 80%; }
+            .subjects-grid, .steps-grid, .stats-block { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 768px) {
-            .reviews-grid {
-                grid-template-columns: 1fr;
-            }
+            .page-frame { padding: 15px; border-radius: 0; }
+            .shapka { flex-direction: column; gap: 20px; text-align: center; }
+            .nav-links ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .hero-title { font-size: 2em; }
+            .section-title, .steps-title { font-size: 1.8em; }
+            .hero-block { padding: 25px 15px; }
+            .steps-section { padding: 30px 20px; }
+            .subjects-grid, .steps-grid, .stats-block, .reviews-grid { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .hero-right img { max-width: 100%; }
         }
     </style>
 </head>
@@ -341,7 +346,7 @@
                 <li><a href="#reviews">Відгуки</a></li>
             </ul>
         </div>
-        <button class="action-button-main">Записатись</button>
+        <button class="action-button-main open-modal">Записатись</button>
     </div>
 
     <!-- Головний екран -->
@@ -350,7 +355,7 @@
             <span class="badge-text">Хочеш вивчати мови?</span>
             <h1 class="hero-title">Цікавий матеріал - <br><span>цікаве навчання</span></h1>
             <p class="hero-desc">З нами ви не будете зубрити , а просто вчити матеріал та використовувати його. Чим більше ви спілкуєтеся тим краще ви будете знати мову. Розмова , екзамени , граматика все з чим ви стикаєтесь ми зможемо допомогти.</p>
-            <button class="hero-callout-btn">Записатись на пробний урок</button>
+            <button class="hero-callout-btn open-modal">Записатись на пробний урок</button>
         </div>
         <div class="hero-right">
             <img src="img/Student.png" alt="Student">
@@ -360,53 +365,53 @@
     <!-- Статистика -->
     <div class="stats-block">
         <div class="stat-card blue">
-            <h3 class="stat-number">93%</h3>
-            <p class="stat-text">учнів краще розуміють матеріал</p>
+            <h3 class="stat-number">З нами</h3>
+            <p class="stat-text"> ви краще зрозумієте матеріал</p>
         </div>
         <div class="stat-card orange">
-            <h3 class="stat-number">8/10</h3>
-            <p class="stat-text">почуваються впевненіше на уроках</p>
+            <h3 class="stat-number">Вивчаєш</h3>
+            <p class="stat-text"> з задоволенням</p>
         </div>
         <div class="stat-card teal">
-            <h3 class="stat-number">+40%</h3>
-            <p class="stat-text">вища активність на заняттях</p>
+            <h3 class="stat-number">Цікавий матеріал,</h3>
+            <p class="stat-text"> та цікаві заняття</p>
         </div>
         <div class="stat-card pink">
-            <h3 class="stat-number">100+</h3>
-            <p class="stat-text">учнів навчаються в ADMI School</p>
+            <h3 class="stat-number">Більше 80 учнів</h3>
+            <p class="stat-text"> вже займаються в парах, індивідуально, групах</p>
         </div>
     </div>
     
     <!-- Блок Предмети -->
     <div id="subjcts" class="section-header">
         <div>
-            <h2 class="section-title">Обери свій <span>предмет</span></h2>
-            <p class="section-subtitle">Підберемо репетитора під твій рівень і ціль.</p>
+            <h2 class="section-title">Обери свою <span>мову</span></h2>
+            <p class="section-subtitle">На консультації, визначимо рівень і ціль</p>
         </div>
         <div class="header-controls">
-            <a href="#" class="btn-secondary">Не знайшов предмет? &rarr;</a>
+            <a href="#" class="btn-secondary">Не знайшов мову? &rarr;</a>
             <button class="nav-arrow">&larr;</button>
             <button class="nav-arrow">&rarr;</button>
         </div>
     </div>
 
     <div class="subjects-grid">
-        <a href="#" class="subject-card card-math" style="background-image: url('img/Rum.jpg');">
+        <a href="#" class="subject-card card-math open-modal" style="background-image: url('img/Rum.jpg');">
             <div class="subject-content">
                 <h3>Румунська мова</h3>
-                <p>(можна додати опис за бажанням)</p>
+                <p>Записатися на заняття</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-prog" style="background-image: url('img/Ches.jpg');">
+        <a href="#" class="subject-card card-prog open-modal" style="background-image: url('img/Ches.jpg');">
             <div class="subject-content">
                 <h3>Чеська мова</h3>
-                <p>(можна додати опис за бажанням)</p>
+                <p>Записатися на заняття</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-eng" style="background-image: url('img/Angl.jpg');">
+        <a href="#" class="subject-card card-eng open-modal" style="background-image: url('img/Angl.jpg');">
             <div class="subject-content">
                 <h3>Англійська мова</h3>
-                <p>(можна додати опис за бажанням)</p>
+                <p>Записатися на заняття</p>
             </div>
         </a>
     </div>
@@ -450,7 +455,6 @@
         </div>
 
         <div class="reviews-grid">
-            <!-- Отзыв 1 -->
             <div class="review-card">
                 <div>
                     <div class="review-stars">★★★★★</div>
@@ -465,7 +469,6 @@
                 </div>
             </div>
 
-            <!-- Отзыв 2 -->
             <div class="review-card">
                 <div>
                     <div class="review-stars">★★★★★</div>
@@ -484,23 +487,89 @@
 
 </div>
 
-</body>
+<!-- ВСПЛЫВАЮЩЕЕ ОКНО С ФОРМОЙ -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <h3>Записатись на урок</h3>
+        <p>Заповніть форму, і перейдіть у чат з адміністратором</p>
+        <form id="leadForm">
+            <div class="form-group">
+                <label>Ваше ім'я</label>
+                <input type="text" id="userName" placeholder="Олександр" required>
+            </div>
+            <div class="form-group">
+                <label>Оберіть мову</label>
+                <select id="userLang">
+                    <option value="Англійська мова">Англійська мова</option>
+                    <option value="Чеська мова">Чеська мова</option>
+                    <option value="Румунська мова">Румунська мова</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Перейти у чат</button>
+        </form>
+    </div>
+</div>
 
 <script>
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: 'smooth'
+    // Плавная прокрутка
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
         });
-      }
     });
-  });
+
+    // Логика модального окна
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeModal');
+    const openBtns = document.querySelectorAll('.open-modal');
+
+    // !!! ВАЖНО: Укажи тут юзернейм админа в Telegram (без символа @) !!!
+    const telegramAdminUsername = "naley85"; 
+
+    openBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Отправка формы в Telegram
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('userName').value;
+        const lang = document.getElementById('userLang').value;
+        
+        // Формируем текст сообщения
+        const message = `Вітаю! Мене звати ${name}. Я хочу записатися на курс: ${lang}.`;
+        
+        // Создаем ссылку на Telegram
+        const tgUrl = `https://t.me/${telegramAdminUsername}?text=${encodeURIComponent(message)}`;
+        
+        // Открываем диалог в Telegram
+        window.open(tgUrl, '_blank');
+        modal.style.display = 'none';
+    });
 </script>
 
+</body>
 </html>
