@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMI School</title>
+    <title> World of languages</title>
     <style>
         body {
-            background: rgb(245, 245, 245);
+            background: linear-gradient(135deg, #6e8cc4 0%, #6593d4 100%);
+            background-attachment: fixed; /* Фон не дергается при прокрутке */
             margin: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: #333;
@@ -22,7 +23,7 @@
             padding: 20px 40px 60px;
         }
 
-        /* --- Шапка та Головний екран (з попереднього кроку) --- */
+        /* --- Шапка --- */
         .shapka {
             display: flex;
             justify-content: space-between;
@@ -36,6 +37,7 @@
         .nav-links a { text-decoration: none; color: #555; font-weight: 600; }
         .action-button-main { background: #1a2a53; color: white; padding: 10px 25px; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; }
 
+        /* --- Головний екран --- */
         .hero-block {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
@@ -46,12 +48,43 @@
             border-radius: 20px;
             margin-bottom: 40px;
         }
-        .badge-text { background: white; border: 1px solid #ddd; color: #1a2a53; display: inline-block; padding: 5px 15px; border-radius: 15px; font-weight: 700; margin-bottom: 20px; }
-        .hero-title { margin: 0 0 20px 0; font-size: 3em; color: #1a2a53; line-height: 1.1; font-weight: 800; }
-        .hero-title span { background: #5b8bb8; color: white; padding: 0 10px; border-radius: 8px; }
-        .hero-desc { font-size: 1.1em; color: #666; margin-bottom: 30px; }
-        .hero-callout-btn { background: #1a2a53; color: white; padding: 15px 35px; border: none; border-radius: 30px; font-weight: 700; font-size: 1.1em; cursor: pointer; margin-bottom: 15px; }
 
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .badge-text { 
+            background: white; 
+            border: 1px solid #ddd; 
+            color: #1a2a53; 
+            display: inline-block; 
+            padding: 5px 15px; 
+            border-radius: 15px; 
+            font-weight: 700; 
+        }
+
+        /* ТУТ НАСТРАИВАЕТСЯ ОТСТУП ДЛЯ ЗАГОЛОВКА */
+        .hero-title { 
+            margin: 25px 0; /* 25px сверху и снизу от заголовка */
+            font-size: 3em; 
+            color: #1a2a53; 
+            line-height: 1.2; 
+            font-weight: 800; 
+        }
+        .hero-title span { background: #5b8bb8; color: white; padding: 0 10px; border-radius: 8px; }
+        .hero-desc { font-size: 1.1em; color: #666; margin-bottom: 30px; line-height: 1.5; }
+        .hero-callout-btn { background: #1a2a53; color: white; padding: 15px 35px; border: none; border-radius: 30px; font-weight: 700; font-size: 1.1em; cursor: pointer; }
+
+        /* Ограничение картинки, чтобы она не ломала мобильную верстку */
+        .hero-right img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- Статистика --- */
         .stats-block {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -66,7 +99,7 @@
         .stat-number { font-size: 2.5em; font-weight: 900; margin: 0; }
         .stat-text { font-size: 1em; margin: 0; font-weight: 600; opacity: 0.9; }
 
-        /* --- НОВИЙ БЛОК: Предмети --- */
+        /* --- Блок Предмети --- */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -75,46 +108,12 @@
             flex-wrap: wrap;
             gap: 20px;
         }
-        .section-title {
-            font-size: 2.5em;
-            color: #1a2a53;
-            font-weight: 900;
-            margin: 0 0 10px 0;
-        }
-        .section-title span {
-            background: #6a9bc2;
-            color: white;
-            padding: 0 10px;
-            border-radius: 8px;
-        }
-        .section-subtitle {
-            color: #666;
-            margin: 0;
-            font-size: 1.1em;
-        }
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn-secondary {
-            border: 1px solid #ddd;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-        }
-        .nav-arrow {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background: white;
-            cursor: pointer;
-            font-size: 1.2em;
-        }
+        .section-title { font-size: 2.5em; color: #1a2a53; font-weight: 900; margin: 0 0 10px 0; }
+        .section-title span { background: #6a9bc2; color: white; padding: 0 10px; border-radius: 8px; }
+        .section-subtitle { color: #666; margin: 0; font-size: 1.1em; }
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+        .btn-secondary { border: 1px solid #ddd; background: white; padding: 10px 20px; border-radius: 20px; text-decoration: none; color: #333; font-weight: 600; }
+        .nav-arrow { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 1.2em; }
 
         .subjects-grid {
             display: grid;
@@ -127,7 +126,7 @@
             border-radius: 20px;
             overflow: hidden;
             position: relative;
-            background-color: #ddd; /* Заглушка, якщо немає фото */
+            background-color: #ddd;
             background-size: cover;
             background-position: center;
             display: flex;
@@ -135,7 +134,6 @@
             padding: 20px;
             text-decoration: none;
         }
-        /* Градієнт для читабельності тексту на фото */
         .subject-card::before {
             content: '';
             position: absolute;
@@ -144,50 +142,24 @@
             background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
             z-index: 1;
         }
-        .subject-content {
-            position: relative;
-            z-index: 2;
-            color: white;
-        }
-        .subject-content h3 {
-            margin: 0 0 5px 0;
-            font-size: 1.4em;
-            font-weight: 800;
-        }
-        .subject-content p {
-            margin: 0;
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
+        .subject-content { position: relative; z-index: 2; color: white; }
+        .subject-content h3 { margin: 0 0 5px 0; font-size: 1.4em; font-weight: 800; }
+        .subject-content p { margin: 0; font-size: 0.9em; opacity: 0.9; }
 
-        /* Особливі кольори градієнтів для кожної картки (як на макеті) */
         .card-math::before { background: linear-gradient(to top, rgba(38, 88, 124, 0.9), transparent); }
         .card-prog::before { background: linear-gradient(to top, rgba(94, 63, 153, 0.9), transparent); }
         .card-eng::before { background: linear-gradient(to top, rgba(54, 133, 116, 0.9), transparent); }
-        .card-ukr::before { background: linear-gradient(to top, rgba(184, 76, 102, 0.9), transparent); }
 
-        /* --- НОВИЙ БЛОК: 4 Кроки --- */
+        /* --- Блок 4 Кроки --- */
         .steps-section {
             background: #1e3a5f;
             border-radius: 25px;
             padding: 50px;
             color: white;
         }
-        .steps-title {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin: 0 0 10px 0;
-        }
-        .steps-title span {
-            background: #5b8bb8;
-            padding: 0 10px;
-            border-radius: 8px;
-        }
-        .steps-subtitle {
-            color: #a0b8d0;
-            margin: 0 0 40px 0;
-            font-size: 1.1em;
-        }
+        .steps-title { font-size: 2.5em; font-weight: 900; margin: 0 0 10px 0; }
+        .steps-title span { background: #5b8bb8; padding: 0 10px; border-radius: 8px; }
+        .steps-subtitle { color: #a0b8d0; margin: 0 0 40px 0; font-size: 1.1em; }
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -206,29 +178,73 @@
             font-weight: 800;
             margin-bottom: 20px;
         }
-        .step-item h4 {
-            font-size: 1.2em;
-            margin: 0 0 10px 0;
-            font-weight: 700;
-        }
-        .step-item p {
-            color: #a0b8d0;
-            margin: 0;
-            font-size: 0.95em;
-            line-height: 1.5;
+        .step-item h4 { font-size: 1.2em; margin: 0 0 10px 0; font-weight: 700; }
+        .step-item p { color: #a0b8d0; margin: 0; font-size: 0.95em; line-height: 1.5; }
+
+        /* ========================================================= */
+        /* --- ПРОСТАЯ И ПОНЯТНАЯ АДАПТИВНОСТЬ --- */
+        /* ========================================================= */
+
+        /* 1. ПЛАНШЕТЫ (Ширина экрана меньше 1024px) */
+        @media (max-width: 1024px) {
+            .hero-block { 
+                grid-template-columns: 1fr; /* Картинка становится под текстом */
+                padding: 35px;
+            }
+            .hero-right {
+                text-align: center;
+            }
+            .hero-right img {
+                margin: 0 auto;
+                max-width: 80%; /* Уменьшаем картинку на планшете */
+            }
+            /* Показываем карточки в 2 колонки вместо 4 */
+            .subjects-grid, 
+            .steps-grid, 
+            .stats-block { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
         }
 
-        /* --- Адаптивність --- */
-        @media (max-width: 1024px) {
-            .subjects-grid, .steps-grid { grid-template-columns: repeat(2, 1fr); }
-            .hero-block { grid-template-columns: 1fr; }
-        }
+        /* 2. ТЕЛЕФОНЫ (Ширина экрана меньше 768px) */
         @media (max-width: 768px) {
-            .page-frame { padding: 15px; }
-            .shapka { flex-direction: column; gap: 15px; }
-            .subjects-grid, .steps-grid, .stats-block { grid-template-columns: 1fr; }
-            .section-header { flex-direction: column; align-items: flex-start; }
+            .page-frame { 
+                padding: 15px; 
+                border-radius: 0; /* На мобилках убираем внешний радиус */
+            }
+            
+            /* Шапка становится вертикальной */
+            .shapka { 
+                flex-direction: column; 
+                gap: 20px; 
+                text-align: center; 
+            }
+            .nav-links ul { 
+                flex-wrap: wrap; 
+                justify-content: center; 
+                gap: 15px; 
+            }
+
+            /* Уменьшаем слишком большие заголовки под экран смартфона */
+            .hero-title { font-size: 2em; }
+            .section-title, .steps-title { font-size: 1.8em; }
+            .hero-block { padding: 25px 15px; }
             .steps-section { padding: 30px 20px; }
+
+            /* Всё выстраивается строго в 1 колонку */
+            .subjects-grid, 
+            .steps-grid, 
+            .stats-block { 
+                grid-template-columns: 1fr; 
+            }
+
+            .section-header { 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            .hero-right img {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -239,7 +255,7 @@
     <!-- Шапка -->
     <div class="shapka">
         <div class="logo">
-            <h2>TEST SCHOOL</h2>
+            <h2>World of languages</h2>
         </div>
         <div class="nav-links">
             <ul>
@@ -255,13 +271,13 @@
     <!-- Головний екран -->
     <div class="hero-block">
         <div class="hero-left">
-            <span class="badge-text">Хочеш 180+ на НМТ?</span>
-            <h1 class="hero-title">Розуміння, впевненість і<br><span>жага вчитися</span></h1>
-            <p class="hero-desc">Ми вчимо не зубрити, а розуміти. Допомагаємо успішно закривати прогалини, готуватися до контрольних та НМТ і бачити реальний результат.</p>
+            <span class="badge-text">Хочеш вивчати мови?</span>
+            <h1 class="hero-title">Цікавий матеріал - <br><span>цікаве навчання</span></h1>
+            <p class="hero-desc">З нами ви не будете зубрити , а просто вчити матеріал та використовувати його. Чим більше ви спілкуєтеся тим краще ви будете знати мову. Розмова , екзамени , граматика все з чим ви стикаєтесь ми зможемо допомогти.</p>
             <button class="hero-callout-btn">Записатись на пробний урок</button>
         </div>
         <div class="hero-right">
-            <!-- Тут має бути фото учня -->
+            <img src="img/Student.png" alt="Student">
         </div>
     </div>
 
@@ -299,29 +315,22 @@
     </div>
 
     <div class="subjects-grid">
-        <!-- Додай правильні шляхи до своїх картинок у url() -->
-        <a href="#" class="subject-card card-math" style="background-image: url('img/math-bg.jpg');">
+        <a href="#" class="subject-card card-math" style="background-image: url('img/Rum.JPG');">
             <div class="subject-content">
-                <h3>Математика</h3>
-                <p>НМТ • ДПА • 3-11 клас</p>
+                <h3>Румунська мова</h3>
+                <p>(можна додати опис за бажанням)</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-prog" style="background-image: url('img/prog-bg.jpg');">
+        <a href="#" class="subject-card card-prog" style="background-image: url('img/Ches.JPG');">
             <div class="subject-content">
-                <h3>Програмування</h3>
-                <p>з нуля • Python, web</p>
+                <h3>Чеська мова</h3>
+                <p>(можна додати опис за бажанням)</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-eng" style="background-image: url('img/eng-bg.jpg');">
+        <a href="#" class="subject-card card-eng" style="background-image: url('img/Angl.JPG');">
             <div class="subject-content">
                 <h3>Англійська мова</h3>
-                <p>НМТ • ДПА • розмовна</p>
-            </div>
-        </a>
-        <a href="#" class="subject-card card-ukr" style="background-image: url('img/ukr-bg.jpg');">
-            <div class="subject-content">
-                <h3>Українська мова</h3>
-                <p>НМТ • ДПА • 3-11 клас</p>
+                <p>(можна додати опис за бажанням)</p>
             </div>
         </a>
     </div>
