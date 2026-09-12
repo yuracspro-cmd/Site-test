@@ -28,7 +28,7 @@
             padding: 20px 40px 60px;
         }
 
-        /* --- Шапка --- */
+
         .shapka {
             display: flex;
             justify-content: space-between;
@@ -42,7 +42,7 @@
         .nav-links a { text-decoration: none; color: #555; font-weight: 600; }
         .action-button-main { background: #1a2a53; color: white; padding: 10px 25px; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; }
 
-        /* --- Головний екран --- */
+
         .hero-block {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
@@ -87,7 +87,7 @@
             display: block;
         }
 
-        /* --- Статистика --- */
+
         .stats-block {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -102,7 +102,7 @@
         .stat-number { font-size: 2.5em; font-weight: 900; margin: 0; }
         .stat-text { font-size: 1em; margin: 0; font-weight: 600; opacity: 0.9; }
 
-        /* --- Блок Предмети --- */
+
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -153,7 +153,7 @@
         .card-prog::before { background: linear-gradient(to top, rgba(94, 63, 153, 0.9), transparent); }
         .card-eng::before { background: linear-gradient(to top, rgba(54, 133, 116, 0.9), transparent); }
 
-        /* --- Блок 4 Кроки --- */
+
         .steps-section {
             background: #1e3a5f;
             border-radius: 25px;
@@ -184,7 +184,7 @@
         .step-item h4 { font-size: 1.2em; margin: 0 0 10px 0; font-weight: 700; }
         .step-item p { color: #a0b8d0; margin: 0; font-size: 0.95em; line-height: 1.5; }
 
-        /* --- СТИЛИ ДЛЯ ОТЗЫВОВ --- */
+
         .reviews-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -249,7 +249,7 @@
             font-size: 0.85em;
         }
 
-        /* --- ВСПЛЫВАЮЩЕЕ ОКНО (POPUP) --- */
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -307,7 +307,7 @@
             margin-top: 10px;
         }
 
-        /* --- АДАПТИВНОСТЬ --- */
+
         @media (max-width: 1024px) {
             .hero-block { grid-template-columns: 1fr; padding: 35px; }
             .hero-right { text-align: center; }
@@ -333,7 +333,7 @@
 
 <div class="page-frame">
 
-    <!-- Шапка -->
+
     <div class="shapka">
         <div class="logo">
             <h2>World of languages</h2>
@@ -341,15 +341,14 @@
         <div class="nav-links">
             <ul>
                 <li><a href="#subjcts">Предмети</a></li>
-                <li><a href="#">Як працюємо</a></li>
-                <li><a href="#">Формати</a></li>
+                <li><a href="#start">Як почати</a></li>
                 <li><a href="#reviews">Відгуки</a></li>
             </ul>
         </div>
         <button class="action-button-main open-modal">Записатись</button>
     </div>
 
-    <!-- Головний екран -->
+
     <div class="hero-block">
         <div class="hero-left">
             <span class="badge-text">Хочеш вивчати мови?</span>
@@ -362,7 +361,7 @@
         </div>
     </div>
 
-    <!-- Статистика -->
+
     <div class="stats-block">
         <div class="stat-card blue">
             <h3 class="stat-number">З нами</h3>
@@ -382,7 +381,7 @@
         </div>
     </div>
     
-    <!-- Блок Предмети -->
+
     <div id="subjcts" class="section-header">
         <div>
             <h2 class="section-title">Обери свою <span>мову</span></h2>
@@ -416,36 +415,35 @@
         </a>
     </div>
 
-    <!-- Блок 4 Кроки -->
-    <div class="steps-section">
-        <h2 class="steps-title">Всього <span>4 кроки</span> до результату</h2>
-        <p class="steps-subtitle">Простий шлях від заявки до перших успіхів.</p>
+
+    <div id="start" class="steps-section">
+        <h2 class="steps-title">Твій шлях до <span>вільної мови</span></h2>
+        <p class="steps-subtitle">Проведемо за руку від першого повідомлення до впевненої розмови.</p>
         
         <div class="steps-grid">
             <div class="step-item">
                 <div class="step-num">01</div>
-                <h4>Залишаєш заявку</h4>
-                <p>Заповни просту форму або напиши нам у месенджер.</p>
+                <h4>Робимо перший крок</h4>
+                <p>Заповнюй форму на сайті або пиши нам, і ми одразу відповімо.</p>
             </div>
             <div class="step-item">
                 <div class="step-num">02</div>
-                <h4>Проходиш тест рівня</h4>
-                <p>Безкоштовно визначимо сильні та слабкі сторони.</p>
+                <h4>Знайомимось ближче</h4>
+                <p>Короткий безкоштовний тест, щоб зрозуміти твою базу та цілі.</p>
             </div>
             <div class="step-item">
                 <div class="step-num">03</div>
-                <h4>Підбираємо репетитора</h4>
-                <p>Під твою ціль, рівень знань і характер.</p>
+                <h4>Обираємо наставника</h4>
+                <p>Підбираємо репетитора під твій темп, характер та навіть хобі.</p>
             </div>
             <div class="step-item">
                 <div class="step-num">04</div>
-                <h4>Починаєш навчання</h4>
-                <p>Перший пробний урок — безкоштовний.</p>
+                <h4>Стартуємо</h4>
+                <p>Пробне заняття, де ти вже почнеш використовувати нові знання.</p>
             </div>
         </div>
     </div>
 
-    <!-- Блок Відгуки -->
     <div id="reviews" style="margin-top: 60px;">
         <div class="section-header">
             <div>
@@ -487,7 +485,6 @@
 
 </div>
 
-<!-- ВСПЛЫВАЮЩЕЕ ОКНО С ФОРМОЙ -->
 <div class="modal-overlay" id="modal">
     <div class="modal-box">
         <button class="modal-close" id="closeModal">&times;</button>
@@ -512,7 +509,6 @@
 </div>
 
 <script>
-    // Плавная прокрутка
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');
@@ -528,13 +524,11 @@
         });
     });
 
-    // Логика модального окна
     const modal = document.getElementById('modal');
     const closeBtn = document.getElementById('closeModal');
     const openBtns = document.querySelectorAll('.open-modal');
 
-    // !!! ВАЖНО: Укажи тут юзернейм админа в Telegram (без символа @) !!!
-    const telegramAdminUsername = "naley85"; 
+    const telegramAdminUsername = "@mirellamarina"; 
 
     openBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -553,19 +547,16 @@
         }
     });
 
-    // Отправка формы в Telegram
+
     document.getElementById('leadForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const name = document.getElementById('userName').value;
         const lang = document.getElementById('userLang').value;
         
-        // Формируем текст сообщения
         const message = `Вітаю! Мене звати ${name}. Я хочу записатися на курс: ${lang}.`;
         
-        // Создаем ссылку на Telegram
         const tgUrl = `https://t.me/${telegramAdminUsername}?text=${encodeURIComponent(message)}`;
         
-        // Открываем диалог в Telegram
         window.open(tgUrl, '_blank');
         modal.style.display = 'none';
     });
