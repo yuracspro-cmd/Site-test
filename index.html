@@ -40,8 +40,23 @@
         .logo h2 { margin: 0; color: #1a2a53; font-size: 1.8em; font-weight: 800; }
         .nav-links ul { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: #555; font-weight: 600; }
-        .action-button-main { background: #1a2a53; color: white; padding: 10px 25px; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; }
+        .action-button-main { 
+            background: #1a2a53; 
+            color: white; 
+            padding: 10px 25px; 
+            border: none; 
+            border-radius: 25px; 
+            font-weight: 700; 
+            cursor: pointer; 
 
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+        }
+
+        .action-button-main:hover {
+            background: #2a4073;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(26, 42, 83, 0.3);
+        }
 
         .hero-block {
             display: grid;
@@ -79,7 +94,24 @@
         }
         .hero-title span { background: #5b8bb8; color: white; padding: 0 10px; border-radius: 8px; }
         .hero-desc { font-size: 1.1em; color: #666; margin-bottom: 30px; line-height: 1.5; }
-        .hero-callout-btn { background: #1a2a53; color: white; padding: 15px 35px; border: none; border-radius: 30px; font-weight: 700; font-size: 1.1em; cursor: pointer; }
+        .hero-callout-btn { 
+            background: #1a2a53; 
+            color: white; 
+            padding: 15px 35px; 
+            border: none; 
+            border-radius: 30px; 
+            font-weight: 700; 
+            font-size: 1.1em; 
+            cursor: pointer; 
+
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+        }
+
+        .hero-callout-btn:hover {
+            background: #2a4073;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 42, 83, 0.3);
+        }
 
         .hero-right img {
             max-width: 100%;
@@ -288,7 +320,6 @@
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
-            border-radius: 10px;
             font-size: 1em;
             box-sizing: border-radius;
             box-sizing: border-box;
@@ -305,6 +336,10 @@
             font-size: 1em;
             cursor: pointer;
             margin-top: 10px;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
         }
 
 
@@ -397,19 +432,25 @@
     <div class="subjects-grid">
         <a href="#" class="subject-card card-math open-modal" style="background-image: url('img/Rum.jpg');">
             <div class="subject-content">
-                <h3>Румунська мова</h3>
+                <h3>Румунська мова - Мірелла</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
         <a href="#" class="subject-card card-prog open-modal" style="background-image: url('img/Ches.jpg');">
             <div class="subject-content">
-                <h3>Чеська мова</h3>
+                <h3>Чеська мова - Ольга</h3>
+                <p>Записатися на заняття</p>
+            </div>
+        </a>
+        <a href="#" class="subject-card card-prog open-modal" style="background-image: url('img/Ches2.jpg');">
+            <div class="subject-content">
+                <h3>Чеська мова - Тетяна</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
         <a href="#" class="subject-card card-eng open-modal" style="background-image: url('img/Angl.jpg');">
             <div class="subject-content">
-                <h3>Англійська мова</h3>
+                <h3>Англійська мова - Ганна</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
@@ -528,7 +569,7 @@
     const closeBtn = document.getElementById('closeModal');
     const openBtns = document.querySelectorAll('.open-modal');
 
-    const telegramAdminUsername = "@mirellamarina"; 
+    const telegramAdminUsername = "mirellamarina"; 
 
     openBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
