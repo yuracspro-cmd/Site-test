@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World of languages</title>
     <style>
-
         html, body {
             scroll-behavior: smooth !important;
         }
@@ -28,7 +27,6 @@
             padding: 20px 40px 60px;
         }
 
-
         .shapka {
             display: flex;
             justify-content: space-between;
@@ -40,6 +38,7 @@
         .logo h2 { margin: 0; color: #1a2a53; font-size: 1.8em; font-weight: 800; }
         .nav-links ul { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: #555; font-weight: 600; }
+        
         .action-button-main { 
             background: #1a2a53; 
             color: white; 
@@ -48,7 +47,6 @@
             border-radius: 25px; 
             font-weight: 700; 
             cursor: pointer; 
-
             transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
         }
 
@@ -94,6 +92,7 @@
         }
         .hero-title span { background: #5b8bb8; color: white; padding: 0 10px; border-radius: 8px; }
         .hero-desc { font-size: 1.1em; color: #666; margin-bottom: 30px; line-height: 1.5; }
+        
         .hero-callout-btn { 
             background: #1a2a53; 
             color: white; 
@@ -103,7 +102,6 @@
             font-weight: 700; 
             font-size: 1.1em; 
             cursor: pointer; 
-
             transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
         }
 
@@ -119,7 +117,6 @@
             display: block;
         }
 
-
         .stats-block {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -133,7 +130,6 @@
         .stat-card.pink { background: #fce4ec; color: #c2185b; }
         .stat-number { font-size: 2.5em; font-weight: 900; margin: 0; }
         .stat-text { font-size: 1em; margin: 0; font-weight: 600; opacity: 0.9; }
-
 
         .section-header {
             display: flex;
@@ -168,6 +164,7 @@
             align-items: flex-end;
             padding: 20px;
             text-decoration: none;
+            transition: transform 0.2s ease;
         }
         .subject-card::before {
             content: '';
@@ -180,11 +177,7 @@
         .subject-content { position: relative; z-index: 2; color: white; }
         .subject-content h3 { margin: 0 0 5px 0; font-size: 1.4em; font-weight: 800; }
         .subject-content p { margin: 0; font-size: 0.9em; opacity: 0.9; }
-
-        .card-math::before { background: linear-gradient(to top, rgba(38, 88, 124, 0.9), transparent); }
-        .card-prog::before { background: linear-gradient(to top, rgba(94, 63, 153, 0.9), transparent); }
-        .card-eng::before { background: linear-gradient(to top, rgba(54, 133, 116, 0.9), transparent); }
-
+        .subject-card:hover { transform: translateY(-5px); }
 
         .steps-section {
             background: #1e3a5f;
@@ -215,7 +208,6 @@
         }
         .step-item h4 { font-size: 1.2em; margin: 0 0 10px 0; font-weight: 700; }
         .step-item p { color: #a0b8d0; margin: 0; font-size: 0.95em; line-height: 1.5; }
-
 
         .reviews-grid {
             display: grid;
@@ -281,7 +273,6 @@
             font-size: 0.85em;
         }
 
-
         .modal-overlay {
             display: none;
             position: fixed;
@@ -321,8 +312,8 @@
             padding: 12px;
             border: 1px solid #ccc;
             font-size: 1em;
-            box-sizing: border-radius;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Исправлена ошибка */
+            border-radius: 8px;
         }
 
         .submit-btn {
@@ -337,11 +328,6 @@
             cursor: pointer;
             margin-top: 10px;
         }
-
-        .subject-card:hover {
-            transform: translateY(-5px);
-        }
-
 
         @media (max-width: 1024px) {
             .hero-block { grid-template-columns: 1fr; padding: 35px; }
@@ -368,7 +354,6 @@
 
 <div class="page-frame">
 
-
     <div class="shapka">
         <div class="logo">
             <h2>World of languages</h2>
@@ -380,47 +365,44 @@
                 <li><a href="#reviews">Відгуки</a></li>
             </ul>
         </div>
-        <button class="action-button-main open-modal">Записатись</button>
+        <button class="action-button-main open-modal" data-lang="Англійська мова">Записатись</button>
     </div>
-
 
     <div class="hero-block">
         <div class="hero-left">
             <span class="badge-text">Хочеш вивчати мови?</span>
             <h1 class="hero-title">Цікавий матеріал - <br><span>цікаве навчання</span></h1>
-            <p class="hero-desc">З нами ви не будете зубрити , а просто вчити матеріал та використовувати його. Чим більше ви спілкуєтеся тим краще ви будете знати мову. Розмова , екзамени , граматика все з чим ви стикаєтесь ми зможемо допомогти.</p>
-            <button class="hero-callout-btn open-modal">Записатись на пробний урок</button>
+            <p class="hero-desc">З нами ви не будете зубрити, а просто вчити матеріал та використовувати його. Чим більше ви спілкуєтеся, тим краще ви будете знати мову. Розмова, екзамени, граматика — все, з чим ви стикаєтесь, ми зможемо допомогти.</p>
+            <button class="hero-callout-btn open-modal" data-lang="Англійська мова">Записатись на пробний урок</button>
         </div>
         <div class="hero-right">
             <img src="img/Student.png" alt="Student">
         </div>
     </div>
 
-
     <div class="stats-block">
         <div class="stat-card blue">
             <h3 class="stat-number">З нами</h3>
-            <p class="stat-text"> ви краще зрозумієте матеріал</p>
+            <p class="stat-text">ви краще зрозумієте матеріал</p>
         </div>
         <div class="stat-card orange">
             <h3 class="stat-number">Вивчаєш</h3>
-            <p class="stat-text"> з задоволенням</p>
+            <p class="stat-text">з задоволенням</p>
         </div>
         <div class="stat-card teal">
             <h3 class="stat-number">Цікавий матеріал,</h3>
-            <p class="stat-text"> та цікаві заняття</p>
+            <p class="stat-text">та цікаві заняття</p>
         </div>
         <div class="stat-card pink">
             <h3 class="stat-number">Більше 80 учнів</h3>
-            <p class="stat-text"> вже займаються в парах, індивідуально, групах</p>
+            <p class="stat-text">вже займаються в парах, індивідуально, групах</p>
         </div>
     </div>
-    
 
     <div id="subjcts" class="section-header">
         <div>
             <h2 class="section-title">Обери свою <span>мову</span></h2>
-            <p class="section-subtitle">На консультації, визначимо рівень і ціль</p>
+            <p class="section-subtitle">На консультації визначимо рівень і ціль</p>
         </div>
         <div class="header-controls">
             <a href="#" class="btn-secondary">Не знайшов мову? &rarr;</a>
@@ -430,32 +412,31 @@
     </div>
 
     <div class="subjects-grid">
-        <a href="#" class="subject-card card-math open-modal" style="background-image: url('img/Rum.jpg');">
+        <a href="#" class="subject-card card-math open-modal" data-lang="Румунська мова" style="background-image: url('img/Rum.jpg');">
             <div class="subject-content">
                 <h3>Румунська мова - Мірелла</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-prog open-modal" style="background-image: url('img/Ches.jpg');">
+        <a href="#" class="subject-card card-prog open-modal" data-lang="Чеська мова" style="background-image: url('img/Ches.jpg');">
             <div class="subject-content">
                 <h3>Чеська мова - Марія</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-prog open-modal" style="background-image: url('img/Ches2.jpg');">
+        <a href="#" class="subject-card card-prog open-modal" data-lang="Чеська мова" style="background-image: url('img/Ches2.jpg');">
             <div class="subject-content">
                 <h3>Чеська мова - Тетяна</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
-        <a href="#" class="subject-card card-eng open-modal" style="background-image: url('img/Angl.jpg');">
+        <a href="#" class="subject-card card-eng open-modal" data-lang="Англійська мова" style="background-image: url('img/Angl.jpg');">
             <div class="subject-content">
                 <h3>Англійська мова - Ганна</h3>
                 <p>Записатися на заняття</p>
             </div>
         </a>
     </div>
-
 
     <div id="start" class="steps-section">
         <h2 class="steps-title">Твій шлях до <span>вільної мови</span></h2>
@@ -568,12 +549,18 @@
     const modal = document.getElementById('modal');
     const closeBtn = document.getElementById('closeModal');
     const openBtns = document.querySelectorAll('.open-modal');
+    const userLangSelect = document.getElementById('userLang');
 
     const telegramAdminUsername = "mirellamarina"; 
 
     openBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            // Если у кнопки прописан атрибут языка, автоматически выбираем его в выпадающем списке
+            const langAttr = btn.getAttribute('data-lang');
+            if (langAttr && userLangSelect) {
+                userLangSelect.value = langAttr;
+            }
             modal.style.display = 'flex';
         });
     });
@@ -587,7 +574,6 @@
             modal.style.display = 'none';
         }
     });
-
 
     document.getElementById('leadForm').addEventListener('submit', function(e) {
         e.preventDefault();
